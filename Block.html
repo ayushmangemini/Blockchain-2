@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Project Roadmap: Decentralized Voting Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Calm Neutrals -->
+    <!-- Application Structure Plan: The application is structured into five thematic, navigable sections: Overview, Project Plan, Features, Technology, and Deliverables. This non-linear structure replaces the static slide format, allowing a user (e.g., a supervisor) to freely explore different aspects of the project. The "Project Plan" is an interactive timeline, which is more engaging for visualizing project phases than a static list. The "Features" section is filterable to cater to different interests (e.g., technical vs. demo features). This design prioritizes user-driven exploration and better comprehension of the project's scope and structure. -->
+    <!-- Visualization & Content Choices: 
+        - Report Info: Project Phases & Timeline -> Goal: Show project schedule -> Viz/Method: Interactive vertical timeline (HTML/JS) and a horizontal bar chart (Gantt-style) -> Interaction: Click to expand phase details; hover on chart for tooltips -> Justification: Provides both a detailed drill-down and a high-level overview of the work plan, which is superior to a static list. -> Library/Method: Chart.js for the Gantt chart, Vanilla JS for the interactive timeline.
+        - Report Info: Core, Advanced, Demo Features -> Goal: Organize and compare features -> Viz/Method: Filterable card grid -> Interaction: Buttons to filter feature categories -> Justification: Allows users to focus on specific feature sets without being overwhelmed, making the information more digestible. -> Library/Method: Vanilla JS to control card visibility.
+        - Report Info: Tech Stack -> Goal: Inform about technologies -> Viz/Method: Visual diagram using styled HTML boxes -> Interaction: Static visual -> Justification: More visually appealing and clearer than a simple bulleted list. -> Library/Method: HTML/Tailwind.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa;
+        }
+        .nav-link {
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-link.active, .nav-link:hover {
+            color: #1e40af;
+            border-bottom-color: #1e40af;
+        }
+        .section {
+            display: none;
+        }
+        .section.active {
+            display: block;
+        }
+        .phase-accordion-header {
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .phase-accordion-header:hover {
+            background-color: #eef2ff;
+        }
+        .phase-accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 400px;
+            max-height: 50vh;
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <div class="container mx-auto px-4 py-8">
+
+        <header class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-900">Decentralized Voting Platform</h1>
+            <p class="text-lg text-gray-600 mt-2">An Interactive Project Roadmap</p>
+        </header>
+
+        <nav class="bg-white rounded-lg shadow-md p-4 mb-12 sticky top-4 z-10">
+            <ul class="flex flex-wrap justify-center items-center gap-4 md:gap-8">
+                <li><a href="#overview" class="nav-link active font-medium text-gray-700 pb-1" data-section="overview">Overview</a></li>
+                <li><a href="#plan" class="nav-link font-medium text-gray-700 pb-1" data-section="plan">Project Plan</a></li>
+                <li><a href="#features" class="nav-link font-medium text-gray-700 pb-1" data-section="features">Features</a></li>
+                <li><a href="#tech" class="nav-link font-medium text-gray-700 pb-1" data-section="tech">Technology</a></li>
+                <li><a href="#deliverables" class="nav-link font-medium text-gray-700 pb-1" data-section="deliverables">Deliverables</a></li>
+            </ul>
+        </nav>
+
+        <main id="main-content">
+            <section id="overview" class="section active space-y-12">
+                <div class="bg-white p-8 rounded-lg shadow-lg">
+                    <h2 class="text-3xl font-bold mb-4 text-blue-900">Project Introduction</h2>
+                    <p class="text-lg leading-relaxed text-gray-700">This project explores a modern solution to the age-old problems of voting integrity by leveraging blockchain technology. Our goal is to build a simulated system that demonstrates how a secure, transparent, and immutable voting process can be achieved. We aim to create a compelling proof-of-concept that showcases the future of democratic elections, focusing on the core principles of decentralization without the complexities of real cryptocurrency.</p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="bg-white p-8 rounded-lg shadow-lg">
+                        <h3 class="text-2xl font-bold mb-4 text-red-700">Problem Identification</h3>
+                        <p class="mb-4 text-gray-700">Traditional voting systems face significant challenges that can undermine public trust. This section outlines the key problems we aim to address.</p>
+                        <ul class="space-y-3 list-inside">
+                            <li class="flex items-start"><span class="text-red-500 mr-3 mt-1">●</span><span><strong>Lack of Transparency:</strong> Voters have little visibility into the process after casting their vote.</span></li>
+                            <li class="flex items-start"><span class="text-red-500 mr-3 mt-1">●</span><span><strong>Security Vulnerabilities:</strong> Centralized systems are susceptible to hacking and single points of failure.</span></li>
+                            <li class="flex items-start"><span class="text-red-500 mr-3 mt-1">●</span><span><strong>Fraud and Tampering:</strong> Risk of ballot stuffing, vote alteration, and voter impersonation.</span></li>
+                            <li class="flex items-start"><span class="text-red-500 mr-3 mt-1">●</span><span><strong>Slow Results:</strong> Manual counting and verification can lead to significant delays.</span></li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-8 rounded-lg shadow-lg">
+                        <h3 class="text-2xl font-bold mb-4 text-green-700">Proposed Solution</h3>
+                        <p class="mb-4 text-gray-700">Our solution is a simulated, decentralized voting platform that directly counters the identified problems using blockchain technology.</p>
+                        <ul class="space-y-3 list-inside">
+                            <li class="flex items-start"><span class="text-green-500 mr-3 mt-1">●</span><span><strong>Immutability & Transparency:</strong> Every vote is a transaction on a public ledger, making it verifiable and tamper-proof.</span></li>
+                            <li class="flex items-start"><span class="text-green-500 mr-3 mt-1">●</span><span><strong>Enhanced Security:</strong> Decentralization eliminates single points of failure, distributing trust across the network.</span></li>
+                            <li class="flex items-start"><span class="text-green-500 mr-3 mt-1">●</span><span><strong>Fraud Prevention:</strong> Cryptographic hashing anonymizes voters while preventing double-voting.</span></li>
+                            <li class="flex items-start"><span class="text-green-500 mr-3 mt-1">●</span><span><strong>Real-Time Results:</strong> The system allows for immediate and transparent vote tallying.</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section id="plan" class="section space-y-12">
+                 <div class="bg-white p-8 rounded-lg shadow-lg">
+                    <h2 class="text-3xl font-bold mb-4 text-blue-900">Project Timeline</h2>
+                    <p class="text-lg leading-relaxed text-gray-700 mb-6">This chart provides a high-level overview of the project's timeline, illustrating the duration and sequencing of each development phase. The project is planned over a 16-week period. Hover over the bars to see details for each phase.</p>
+                    <div class="chart-container">
+                        <canvas id="ganttChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="bg-white p-8 rounded-lg shadow-lg">
+                    <h2 class="text-3xl font-bold mb-4 text-blue-900">Interactive Work Plan</h2>
+                    <p class="text-lg leading-relaxed text-gray-700 mb-6">Our project is broken down into six distinct phases, from initial planning to final exhibition. Click on any phase below to expand its detailed tasks and see the key milestone for that stage.</p>
+                    <div id="phases-accordion" class="space-y-4"></div>
+                </div>
+            </section>
+
+            <section id="features" class="section space-y-12">
+                <div class="bg-white p-8 rounded-lg shadow-lg">
+                    <h2 class="text-3xl font-bold mb-4 text-blue-900">Platform Features</h2>
+                    <p class="text-lg leading-relaxed text-gray-700 mb-6">The platform is designed with a rich set of features, categorized into Core, Advanced, and Demo functionalities. Use the buttons below to filter and explore the features that will be developed.</p>
+                    <div class="flex flex-wrap justify-center gap-4 mb-8">
+                        <button class="feature-filter-btn active bg-blue-600 text-white px-6 py-2 rounded-full shadow" data-filter="all">All Features</button>
+                        <button class="feature-filter-btn bg-white text-blue-600 px-6 py-2 rounded-full shadow" data-filter="core">Core</button>
+                        <button class="feature-filter-btn bg-white text-blue-600 px-6 py-2 rounded-full shadow" data-filter="advanced">Advanced</button>
+                        <button class="feature-filter-btn bg-white text-blue-600 px-6 py-2 rounded-full shadow" data-filter="demo">Demo</button>
+                    </div>
+                    <div id="features-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+                </div>
+            </section>
+
+            <section id="tech" class="section space-y-12">
+                <div class="bg-white p-8 rounded-lg shadow-lg">
+                    <h2 class="text-3xl font-bold mb-4 text-blue-900">Technology Stack</h2>
+                    <p class="text-lg leading-relaxed text-gray-700 mb-8">This project will be built using a modern technology stack, chosen to effectively simulate a blockchain environment and deliver a rich, interactive user experience. The architecture is divided into the backend, frontend, and the core blockchain logic.</p>
+                    <div class="grid md:grid-cols-3 gap-8 text-center">
+                        <div class="p-6 border-2 border-blue-100 rounded-lg bg-blue-50">
+                            <h3 class="text-2xl font-semibold mb-2">Backend</h3>
+                            <p class="text-5xl mb-4">🐍</p>
+                            <p class="font-bold text-lg">Python & Flask</p>
+                            <p class="text-gray-600 mt-2">The core blockchain logic and REST API will be built using Python, with Flask serving as the lightweight web framework to handle requests and manage the node.</p>
+                        </div>
+                        <div class="p-6 border-2 border-green-100 rounded-lg bg-green-50">
+                            <h3 class="text-2xl font-semibold mb-2">Frontend</h3>
+                            <p class="text-5xl mb-4">⚛️</p>
+                            <p class="font-bold text-lg">React & WebSockets</p>
+                            <p class="text-gray-600 mt-2">An interactive user interface will be built with React. WebSockets will enable real-time communication for live updates on voting and mining status.</p>
+                        </div>
+                        <div class="p-6 border-2 border-gray-200 rounded-lg bg-gray-50">
+                            <h3 class="text-2xl font-semibold mb-2">Core Logic</h3>
+                            <p class="text-5xl mb-4">🔐</p>
+                            <p class="font-bold text-lg">Cryptography</p>
+                            <p class="text-gray-600 mt-2">Standard hashing libraries (like Python's `hashlib`) will be used to ensure data integrity, create cryptographic links between blocks, and anonymize voter data.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white p-8 rounded-lg shadow-lg">
+                    <h2 class="text-3xl font-bold mb-4 text-blue-900">Security Considerations</h2>
+                    <p class="text-lg leading-relaxed text-gray-700 mb-6">Security is a cornerstone of this project. The following measures are integral to the system's design to ensure a trustworthy and robust platform.</p>
+                     <ul class="space-y-4">
+                        <li class="flex items-center"><span class="text-2xl mr-4">🛡️</span><div><h4 class="font-semibold">Voter ID Anonymization</h4><p class="text-gray-600">Voter identities are protected using cryptographic hashing, ensuring privacy.</p></div></li>
+                        <li class="flex items-center"><span class="text-2xl mr-4">🚫</span><div><h4 class="font-semibold">Double-Voting Prevention</h4><p class="text-gray-600">The system includes mechanisms to verify and reject any subsequent vote attempts from the same voter.</p></div></li>
+                        <li class="flex items-center"><span class="text-2xl mr-4">🔗</span><div><h4 class="font-semibold">Blockchain Tampering Detection</h4><p class="text-gray-600">The integrity of the entire chain is continuously validated, making any alteration immediately detectable.</p></div></li>
+                        <li class="flex items-center"><span class="text-2xl mr-4">🔍</span><div><h4 class="font-semibold">Immutable Audit Trail</h4><p class="text-gray-600">All voting activities are recorded on the blockchain, creating a permanent and publicly verifiable audit trail.</p></div></li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="deliverables" class="section space-y-12">
+                <div class="bg-white p-8 rounded-lg shadow-lg">
+                    <h2 class="text-3xl font-bold mb-4 text-blue-900">Key Deliverables & Future Scope</h2>
+                    <p class="text-lg leading-relaxed text-gray-700">This project will culminate in a set of concrete deliverables and opens the door for several exciting future enhancements.</p>
+                    <div class="mt-8 grid md:grid-cols-2 gap-8">
+                        <div>
+                            <h3 class="text-2xl font-semibold mb-4">Project Deliverables</h3>
+                            <ul class="space-y-3">
+                                <li class="flex items-start"><span class="text-green-500 mr-3 mt-1">✓</span>A fully functional, simulated blockchain voting application.</li>
+                                <li class="flex items-start"><span class="text-green-500 mr-3 mt-1">✓</span>A secure and transparent backend API.</li>
+                                <li class="flex items-start"><span class="text-green-500 mr-3 mt-1">✓</span>An interactive and user-friendly frontend interface.</li>
+                                <li class="flex items-start"><span class="text-green-500 mr-3 mt-1">✓</span>Comprehensive technical documentation and user guide.</li>
+                                <li class="flex items-start"><span class="text-green-500 mr-3 mt-1">✓</span>A final presentation and live demonstration of the project.</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-semibold mb-4">Potential Future Enhancements</h3>
+                            <ul class="space-y-3">
+                                <li class="flex items-start"><span class="text-blue-500 mr-3 mt-1">↪</span>Implement more advanced consensus algorithms (e.g., Proof of Stake).</li>
+                                <li class="flex items-start"><span class="text-blue-500 mr-3 mt-1">↪</span>Integrate advanced cryptographic features like zero-knowledge proofs.</li>
+                                <li class="flex items-start"><span class="text-blue-500 mr-3 mt-1">↪</span>Develop a mobile application version.</li>
+                                <li class="flex items-start"><span class="text-blue-500 mr-3 mt-1">↪</span>Simulate a distributed network with multiple nodes for a more realistic test.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const sections = document.querySelectorAll('.section');
+    const navLinks = document.querySelectorAll('.nav-link');
+
+    function switchTab(targetId) {
+        sections.forEach(section => {
+            section.classList.toggle('active', section.id === targetId);
+        });
+        navLinks.forEach(link => {
+            link.classList.toggle('active', link.dataset.section === targetId);
+        });
+        window.location.hash = targetId;
+    }
+
+    navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const targetId = e.target.dataset.section;
+            switchTab(targetId);
+        });
+    });
+
+    const initialSection = window.location.hash.substring(1) || 'overview';
+    switchTab(initialSection);
+
+    const phasesData = [
+        { 
+            title: "Phase 1: Foundation & Core Architecture",
+            tasks: [
+                "Research blockchain fundamentals and voting system requirements",
+                "Set up development environment (Python, Node.js, code editor)",
+                "Design system architecture diagram and define project scope",
+                "Design blockchain data structures (Block, Vote, Chain)",
+                "Implement basic blockchain classes, genesis block, and mining logic"
+            ],
+            milestone: "Working basic blockchain with mining capability"
+        },
+        { 
+            title: "Phase 2: Backend Development",
+            tasks: [
+                "Design REST API endpoints for all voting operations",
+                "Implement voter registration, anonymization, and vote casting",
+                "Build double-voting prevention and tampering detection",
+                "Implement WebSocket connections for live updates"
+            ],
+            milestone: "Complete backend API with all voting functionality"
+        },
+        { 
+            title: "Phase 3: Frontend Development",
+            tasks: [
+                "Design and implement voter registration and voting interfaces",
+                "Build results dashboard with charts and graphs",
+                "Create an interactive blockchain explorer with block details",
+                "Implement responsive design and polish UI/UX"
+            ],
+            milestone: "Full frontend application with all user interfaces"
+        },
+        { 
+            title: "Phase 4: Advanced Features & Visualization",
+            tasks: [
+                "Create interactive blockchain structure display and mining animation",
+                "Build comprehensive voting analytics and security audit reports",
+                "Create a guided demo mode with sample data generation",
+                "Add educational explanations for blockchain concepts"
+            ],
+            milestone: "Advanced visualizations and demo-ready features"
+        },
+        { 
+            title: "Phase 5: Testing & Documentation",
+            tasks: [
+                "Perform unit, integration, and frontend component testing",
+                "Conduct security testing and vulnerability assessment",
+                "Write technical documentation and user manual",
+                "Prepare demo script and presentation materials"
+            ],
+            milestone: "Fully tested, documented, and exhibition-ready project"
+        },
+        { 
+            title: "Phase 6: Exhibition Preparation",
+            tasks: [
+                "Set up exhibition environment and test all features",
+                "Prepare backup plans and troubleshooting guides",
+                "Conduct live demonstrations and handle Q&A sessions"
+            ],
+            milestone: "Successful project demonstration and knowledge sharing"
+        }
+    ];
+
+    const accordionContainer = document.getElementById('phases-accordion');
+    phasesData.forEach((phase, index) => {
+        const phaseElement = document.createElement('div');
+        phaseElement.innerHTML = `
+            <div class="phase-accordion-header flex justify-between items-center p-4 bg-gray-100 rounded-lg">
+                <h3 class="text-lg font-semibold text-blue-800">${phase.title}</h3>
+                <span class="transform transition-transform duration-300">▼</span>
+            </div>
+            <div class="phase-accordion-content bg-white px-4 pb-4 rounded-b-lg">
+                <div class="pt-4 border-t border-gray-200">
+                    <h4 class="font-semibold mb-2">Tasks:</h4>
+                    <ul class="list-disc list-inside space-y-1 text-gray-600">
+                        ${phase.tasks.map(task => `<li>${task}</li>`).join('')}
+                    </ul>
+                    <div class="mt-4 pt-4 border-t border-dashed">
+                        <h4 class="font-semibold mb-2">Milestone:</h4>
+                        <p class="text-green-700 font-medium">✓ ${phase.milestone}</p>
+                    </div>
+                </div>
+            </div>
+        `;
+        accordionContainer.appendChild(phaseElement);
+    });
+
+    document.querySelectorAll('.phase-accordion-header').forEach(header => {
+        header.addEventListener('click', () => {
+            const content = header.nextElementSibling;
+            const icon = header.querySelector('span');
+            
+            if (content.style.maxHeight) {
+                content.style.maxHeight = null;
+                icon.style.transform = 'rotate(0deg)';
+            } else {
+                document.querySelectorAll('.phase-accordion-content').forEach(c => c.style.maxHeight = null);
+                document.querySelectorAll('.phase-accordion-header span').forEach(i => i.style.transform = 'rotate(0deg)');
+                content.style.maxHeight = content.scrollHeight + "px";
+                icon.style.transform = 'rotate(180deg)';
+            }
+        });
+    });
+
+    const featuresData = [
+        { type: 'core', title: 'Voter Registration', description: 'Secure registration with ID hashing for anonymity.' },
+        { type: 'core', title: 'Secure Vote Casting', description: 'Validated and secure ballot casting process.' },
+        { type: 'core', title: 'Real-time Mining', description: 'Simulation of blockchain mining to add and verify votes.' },
+        { type: 'core', title: 'Audit Trail', description: 'Complete and transparent log of all voting activities.' },
+        { type: 'core', title: 'Integrity Verification', description: 'Mechanisms to verify the blockchain\'s integrity.' },
+        { type: 'advanced', title: 'WebSocket Updates', description: 'Live, real-time updates pushed to the user interface.' },
+        { type: 'advanced', title: 'Blockchain Visualization', description: 'Interactive visual explorer for the blockchain structure.' },
+        { type: 'advanced', title: 'Mining Animation', description: 'Visual animation of the block mining process.' },
+        { type: 'advanced', title: 'Tamper Detection', description: 'Active detection of any attempts to tamper with the chain.' },
+        { type: 'advanced', title: 'Export & Reporting', description: 'Functionality to export results and generate reports.' },
+        { type: 'demo', title: 'Guided Demo Mode', description: 'A step-by-step walkthrough of the platform\'s features.' },
+        { type: 'demo', title: 'Sample Data', description: 'One-click generation of sample data for demonstration.' },
+        { type: 'demo', title: 'Educational Explanations', description: 'In-app explanations of key blockchain concepts.' },
+        { type: 'demo', title: 'Reset & Replay', description: 'Ability to reset the demo state and replay scenarios.' },
+    ];
+
+    const featuresGrid = document.getElementById('features-grid');
+    const featureFilterBtns = document.querySelectorAll('.feature-filter-btn');
+
+    function renderFeatures(filter = 'all') {
+        featuresGrid.innerHTML = '';
+        const filteredData = filter === 'all' ? featuresData : featuresData.filter(f => f.type === filter);
+        
+        filteredData.forEach(feature => {
+            const card = document.createElement('div');
+            card.className = `feature-card p-6 rounded-lg shadow-md bg-gray-50 border-l-4`;
+            let borderColor = 'border-gray-400';
+            if (feature.type === 'core') borderColor = 'border-blue-500';
+            if (feature.type === 'advanced') borderColor = 'border-purple-500';
+            if (feature.type === 'demo') borderColor = 'border-teal-500';
+            card.classList.add(borderColor);
+
+            card.innerHTML = `
+                <h3 class="text-xl font-bold mb-2">${feature.title}</h3>
+                <p class="text-gray-600">${feature.description}</p>
+            `;
+            featuresGrid.appendChild(card);
+        });
+    }
+
+    featureFilterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            featureFilterBtns.forEach(b => b.classList.remove('active', 'bg-blue-600', 'text-white'));
+            featureFilterBtns.forEach(b => b.classList.add('bg-white', 'text-blue-600'));
+            btn.classList.add('active', 'bg-blue-600', 'text-white');
+            btn.classList.remove('bg-white', 'text-blue-600');
+            renderFeatures(btn.dataset.filter);
+        });
+    });
+
+    renderFeatures();
+
+    const ganttCtx = document.getElementById('ganttChart').getContext('2d');
+    new Chart(ganttCtx, {
+        type: 'bar',
+        data: {
+            labels: [
+                'Phase 1: Foundation', 
+                'Phase 2: Backend', 
+                'Phase 3: Frontend', 
+                'Phase 4: Advanced Features', 
+                'Phase 5: Testing', 
+                'Phase 6: Exhibition'
+            ],
+            datasets: [{
+                label: 'Project Timeline (Weeks)',
+                data: [
+                    [0, 3],  // Phase 1: Weeks 0-3
+                    [2, 6],  // Phase 2: Weeks 2-6
+                    [5, 9],  // Phase 3: Weeks 5-9
+                    [8, 12], // Phase 4: Weeks 8-12
+                    [11, 15],// Phase 5: Weeks 11-15
+                    [14, 16] // Phase 6: Weeks 14-16
+                ],
+                backgroundColor: [
+                    'rgba(59, 130, 246, 0.7)',
+                    'rgba(16, 185, 129, 0.7)',
+                    'rgba(239, 68, 68, 0.7)',
+                    'rgba(139, 92, 246, 0.7)',
+                    'rgba(249, 115, 22, 0.7)',
+                    'rgba(20, 184, 166, 0.7)'
+                ],
+                borderColor: [
+                    'rgba(59, 130, 246, 1)',
+                    'rgba(16, 185, 129, 1)',
+                    'rgba(239, 68, 68, 1)',
+                    'rgba(139, 92, 246, 1)',
+                    'rgba(249, 115, 22, 1)',
+                    'rgba(20, 184, 166, 1)'
+                ],
+                borderWidth: 1,
+                barPercentage: 0.6,
+                borderSkipped: false,
+            }]
+        },
+        options: {
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const v = context.raw;
+                            return `Weeks: ${v[0]} - ${v[1]}`;
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    min: 0,
+                    max: 16,
+                    title: {
+                        display: true,
+                        text: 'Weeks'
+                    }
+                },
+                y: {
+                    grid: {
+                        display: false
+                    }
+                }
+            }
+        }
+    });
+});
+</script>
+
+</body>
+</html>
